@@ -1,4 +1,6 @@
 import os
+from __builtin__ import xrange
+
 import lmdb # install lmdb by "pip install lmdb"
 import cv2
 import numpy as np
@@ -37,7 +39,7 @@ def createDataset(outputPath, imagePathList, labelList, lexiconList=None, checkV
     #print (len(imagePathList) , len(labelList))
     assert(len(imagePathList) == len(labelList))
     nSamples = len(imagePathList)
-    print '...................'
+    print('...................')
     env = lmdb.open(outputPath, map_size=1099511627776)
     
     cache = {}
@@ -90,7 +92,7 @@ if __name__ == '__main__':
     
     path = '../data/dataline/*.jpg'
     imagePathList = glob.glob(path)
-    print '------------',len(imagePathList),'------------'
+    print('------------',len(imagePathList),'------------')
     imgLabelLists = []
     for p in imagePathList:
         try:

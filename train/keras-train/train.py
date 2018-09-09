@@ -5,11 +5,11 @@ import keys
 import numpy as np
 
 characters = keys.alphabet[:]
-from model import get_model
+import model
 
 nclass = len(characters)+1
 
-import keras.backend as K
+
 
 trainroot = '../data/lmdb/train'
 valroot   = '../data/lmdb/val'
@@ -50,12 +50,15 @@ def gen(loader,flag='train'):
                 break
                 
             yield [X, Y, np.ones(batchs)*int(Length), np.ones(batchs)*n_len], np.ones(batchs)
-        
+
+
+train_dataset = dataset.lmdbDataset(root=trainroot,target_transform=one_hot)
+
 if random_sample:
     sampler = dataset.randomSequentialSampler(train_dataset, batchSize)
 else:
     sampler = None
-train_dataset = dataset.lmdbDataset(root=trainroot,target_transform=one_hot)
+
 
 train_loader = torch.utils.data.DataLoader(
     train_dataset, batch_size=batchSize,
@@ -73,7 +76,7 @@ test_loader = torch.utils.data.DataLoader(
 
 if __name__=='__main__':
     from keras.callbacks import ModelCheckpoint,ReduceLROnPlateau
-    model,basemodel = get_model(height=imgH, nclass=nclass)
+    model,basemodel = model.get_model(height=imgH, nclass=nclass)
     import os
     if os.path.exists('../pretrain-models/keras.hdf5'):
        basemodel.load_weights('../pretrain-models/keras.hdf5')
